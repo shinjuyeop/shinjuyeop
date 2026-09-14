@@ -24,7 +24,7 @@ Validation currently centers on the HIL bench; final integration checks on the v
 
 **Built with:** C/C++ · STM32G4 · FreeRTOS · ROS 2 Humble · micro-ROS · CAN · HIL · React
 
-[Project repository][kai-project] · Private; access required.
+[Project repository][kai-project] · Public personal copy of the Team K.A.I. project.
 
 <!--
 TODO MEDIA
@@ -160,11 +160,10 @@ Activate after adding the file:
 <!--
 Maintenance: Project summaries checked against repository READMEs on 2026-09-10.
 Name, education, and Control Part Lead role supplied by the profile owner.
-TODO: When a public K.A.I. showcase is available, update kai-project below
-and remove the "Private; access required" note above.
+Control repository link updated to the public personal copy on 2026-09-14.
 -->
 
-[kai-project]: https://github.com/TeamKAI-DL/Control
+[kai-project]: https://github.com/shinjuyeop/Control
 [fastreflex-research]: https://github.com/shinjuyeop/Infineon_FastReflex
 [fastreflex-deployment]: https://github.com/shinjuyeop/Infineon_FastReflex_E84
 [fastreflex-validation]: https://github.com/shinjuyeop/Infineon_FastReflex_E84/blob/main/reports/e84_hil_runtime_validation.md
