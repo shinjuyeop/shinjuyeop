@@ -1,20 +1,16 @@
-![Embedded & Control Software — 설계부터 하드웨어 통합과 검증까지](assets/profile-header.svg)
-
 # 신주엽 | Juyeop Shin
 
-**건국대학교 전기전자공학부 · Embedded Systems · Real-Time Control · Edge AI**
+건국대학교 전기전자공학부
 
-장치별 역할과 통신 인터페이스를 설계하고, RTOS 펌웨어와 Host 소프트웨어를 통합해 실차와 HIL에서 검증합니다. STM32 기반 차량 제어부터 PSoC Edge E84의 AI 추론까지, 소프트웨어가 실제 하드웨어에서 동작하는 과정에 관심을 두고 있습니다.
+STM32·ROS 2 기반 차량 제어 소프트웨어와 HIL 시험 환경을 개발했습니다. MuJoCo 기반 보행 위험 탐지 모델 연구와 PSoC Edge E84 배포·검증을 수행했습니다.
 
-**C / C++ · FreeRTOS · STM32 · ROS 2 / micro-ROS · CAN / UART · Python**
-
-[차량 제어][kai-project] · [엣지 AI 배포][fastreflex-deployment] · [모델 연구][fastreflex-research]
+[차량 제어][kai-project] · [모델 연구][fastreflex-research] · [엣지 AI 배포][fastreflex-deployment]
 
 ## 01. 자율주행 차량의 분산 제어와 검증
 
-**Team K.A.I. · 2025 제어 파트장 / 2026 하드웨어 팀장**
+**Team K.A.I. · 2025 제어 파트장 / 2026–현재 하드웨어 팀장**
 
-2025년 ROS 2·Arduino Mega 기반 차량 제어 개발을 거쳐, 2026년에는 Host와 두 STM32G474RE에 기능을 분산하는 구조를 설계·개발했습니다. 펌웨어, 장치 간 인터페이스, 시험 도구를 연결하고 팀원 온보딩과 역할 배분을 맡았습니다. **2026년 테스트위크에서 실차 통합과 상세 검증을 완료했습니다.**
+2025년 ROS 2·Arduino Mega 기반 차량 제어 개발을 거쳐, 2026년에는 Host와 두 STM32G474RE에 기능을 분산하는 구조를 설계·개발했습니다. 펌웨어, 장치 간 인터페이스, HIL 시험 환경의 구현과 통합을 맡았습니다. **2026년 테스트위크에서 실차 통합과 상세 검증을 완료했습니다.**
 
 ```mermaid
 flowchart TB
@@ -61,7 +57,17 @@ flowchart TB
 
 *Team K.A.I. 공동 프로젝트의 개인 공개 사본입니다. 팀의 공동 작업 이력을 보존하고 있습니다.*
 
-## 02. AI 모델을 실제 MCU·NPU로 배포
+## 02. 보행 위험 탐지 모델 연구
+
+**Infineon FastReflex · Unitree G1 / MuJoCo / PyTorch**
+
+골반 IMU 기반 GRU로 보행 위험을 감지하고, 발바닥 압력 기반 MLP로 지형 정보를 보조 판정합니다. 실행 단위로 학습·검증·평가 데이터를 분리하고, 미래 샘플을 사용하지 않는 전처리와 동결 모델 평가 절차를 구성했습니다.
+
+기존 제한 조건의 baseline은 frozen HOLDOUT에서 Hazard 26/26, no-hazard 26/26, premature 0을 기록했습니다. **새로운 물리 조건으로의 일반화는 아직 입증되지 않았습니다.** 실험의 성공·실패와 중단 근거를 함께 기록합니다.
+
+[연구 코드·현재 결과][fastreflex-research] · [데이터 계약][fastreflex-dataset] · [실험 프로토콜][fastreflex-experiments]
+
+## 03. 엣지 AI 배포·검증
 
 **Infineon FastReflex E84 · PSoC Edge E84 / Cortex-M55 / Ethos-U55**
 
@@ -86,27 +92,13 @@ flowchart TB
 
 [배포 코드][fastreflex-deployment] · [펌웨어 통합][fastreflex-firmware] · [배포 파이프라인][fastreflex-pipeline]
 
-## 03. 보행 위험 탐지 모델 연구
-
-**Infineon FastReflex · Unitree G1 / MuJoCo / PyTorch**
-
-골반 IMU 기반 GRU로 보행 위험을 감지하고, 발바닥 압력 기반 MLP로 지형 정보를 보조 판정합니다. 실행 단위로 학습·검증·평가 데이터를 분리하고, 미래 샘플을 사용하지 않는 전처리와 동결 모델 평가 절차를 구성했습니다.
-
-기존 제한 조건의 baseline은 frozen HOLDOUT에서 Hazard 26/26, no-hazard 26/26, premature 0을 기록했습니다. **새로운 물리 조건으로의 일반화는 아직 입증되지 않았습니다.** 실험의 성공·실패와 중단 근거를 함께 기록합니다.
-
-[연구 코드·현재 결과][fastreflex-research] · [데이터 계약][fastreflex-dataset] · [실험 프로토콜][fastreflex-experiments]
-
-## 경험과 수상
+## 경험
 
 | 기간 | 경험 |
 |---|---|
 | 2026.06–현재 | **(주)딥이티 기술개발 인턴** — 온디바이스 AI 모델 연구 및 임베디드 배포 검증, Infineon Startup Challenge 2026 프로젝트 참여 |
-| 2026 | **Team K.A.I. 하드웨어 팀장** — 분산 제어 구조 설계, 펌웨어·Host 통합, 팀원 온보딩 및 실차 검증 |
+| 2026–현재 | **Team K.A.I. 하드웨어 팀장** — 분산 제어 구조 설계, 펌웨어·Host 통합 및 실차 검증 |
 | 2025 | **Team K.A.I. 제어 파트장** — ROS 2·Arduino Mega·CAN 기반 1/2 규모 자율주행차 제어 개발 |
-
-- **2025 대학생 창작 모빌리티 경진대회 특별상** — 자율주행구현 부문 · 국토교통과학기술진흥원
-- **2025 대학생 창작 모빌리티 경진대회 우수상** — 창작기술 부문 · 한국자동차모빌리티안전학회
-- **2025 제17회 창의설계경진대회 장려상** — ROS 2 기반 자율주행 차량 제어 시스템 · 건국대학교 공학교육혁신센터
 
 ## 사용 기술
 
@@ -134,7 +126,7 @@ flowchart TB
 Control 756aa5442d0b327f3be6dd59b9b2cc3889b2341c
 Infineon_FastReflex 434a40762ffb06991537dff6f97ebe5bb2c5f0fe
 Infineon_FastReflex_E84 c1584227cf58234fa9b3f18d56a257db662ed018
-역할·인턴·수상은 본인이 작성한 경력 기록 기준이다.
+역할·인턴은 본인이 작성한 경력 기록 기준이다.
 2026년 실차 상세 검증 완료는 2026-09-14 본인 확인을 반영했다.
 이 프로필 편집 과정에서는 보드·실차 시험을 새로 수행하지 않았다.
 사진·시연 추가 위치와 필요한 자료는 MEDIA_GUIDE.md 참고.
