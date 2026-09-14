@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="248" viewBox="0 0 1280 248" role="img" aria-labelledby="title description">
+  <title id="title">Embedded &amp; Control Software</title>
+  <desc id="description">설계부터 하드웨어 통합과 검증까지. 남색 배경과 청록색 회로 패턴의 프로필 배너.</desc>
+  <defs>
+    <linearGradient id="background" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#12263a"/>
+      <stop offset="1" stop-color="#0b1728"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 32 0 L 0 0 0 32" fill="none" stroke="#ffffff" stroke-opacity="0.035"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="248" rx="18" fill="url(#background)"/>
+  <rect width="1280" height="248" rx="18" fill="url(#grid)"/>
+  <rect x="48" y="51" width="5" height="141" rx="2.5" fill="#56d8c4"/>
+  <g font-family="Arial, 'Noto Sans CJK KR', sans-serif">
+    <text x="76" y="79" font-size="14" font-weight="700" letter-spacing="3" fill="#56d8c4">FIRMWARE / REAL-TIME SYSTEMS / EDGE AI</text>
+    <text x="74" y="133" font-size="43" font-weight="700" letter-spacing="-1" fill="#f2f7fc">Embedded &amp; Control Software</text>
+    <text x="76" y="177" font-size="22" fill="#bbccda">설계부터 하드웨어 통합과 검증까지</text>
+  </g>
+  <g fill="none" stroke="#56d8c4" stroke-width="2" opacity="0.45">
+    <path d="M960 75h65l32 32h80M926 124h67l37 37h95M984 204h54l24-24h80"/>
+    <rect x="1137" y="87" width="46" height="40" rx="6"/>
+    <rect x="1125" y="144" width="46" height="36" rx="6"/>
+    <circle cx="950" cy="75" r="10"/>
+    <circle cx="916" cy="124" r="10"/>
+    <circle cx="974" cy="204" r="10"/>
+  </g>
+</svg>
