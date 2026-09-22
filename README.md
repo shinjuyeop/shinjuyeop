@@ -53,12 +53,6 @@ flowchart TB
 | HMI 분리 | 안전 제어기에서 표시 기능 분리, CAN snapshot 수신, 물리·가상 터치의 화면 전환 로직 공유, C++ 렌더러 재사용 | [UNO R4 HMI][kai-hmi] |
 | LV 배터리 계측 | INA228·RP2350의 Ah/Wh 적산·SOC 저장, CRC32 UART·정비 ACK, STM_B를 통한 ROS·계기판 상태 전달. 실장 교정·적산·정전 복구는 검증 예정 | [계측·통신 구성][kai-lv] · [펌웨어][kai-lv-firmware] |
 
-### 확인할 수 있는 검증 기록
-
-- **HIL 기본 시나리오 4종 통과** — `smoke_test`, `estop_test`, `ez_can_timeout`, `keya_can_timeout`. 실제 액추에이터와 분리한 MCU·에뮬레이터 벤치의 2026-09-09 기록입니다. [결과와 시험 범위][kai-hil]
-- **고장 주입 시험의 전제조건 개선** — 처음부터 통신이 끊긴 환경을 정상 통과로 오인하지 않도록, fault 주입 전에 해당 경로의 정상 상태를 확인합니다. [시나리오·판정 구조][kai-hil-backend]
-- **계측값의 해석 범위 명시** — 태스크 실행시간에는 interrupt·preemption·blocking이 포함됩니다. 관측 최대값과 formal WCET를 구분하고, E-stop 지연의 측정 시작·종료 지점을 문서화했습니다. [계측 기준][kai-runtime]
-
 [프로젝트 전체 코드][kai-project] · [시스템 아키텍처][kai-architecture] · [통신 인터페이스][kai-interfaces]
 
 *Team K.A.I. 공동 프로젝트의 개인 공개 사본입니다. 팀의 공동 작업 이력을 보존하고 있습니다.*
@@ -149,7 +143,6 @@ Infineon_FastReflex_E84 c1584227cf58234fa9b3f18d56a257db662ed018
 [kai-runtime-code]: https://github.com/shinjuyeop/Control/blob/main/firmware/common/runtime_metrics.c
 [kai-stmtest]: https://github.com/shinjuyeop/Control/blob/main/firmware/STM_TEST/README.md
 [kai-hil]: https://github.com/shinjuyeop/Control/blob/main/docs/HIL_RUNBOOK.md#15-진행-상태와-남은-작업
-[kai-hil-backend]: https://github.com/shinjuyeop/Control/blob/main/software/src/vehicle_console/HIL_BACKEND.md
 [kai-console]: https://github.com/shinjuyeop/Control/blob/main/software/src/vehicle_console/README.md
 [kai-console-validation]: https://github.com/shinjuyeop/Control/blob/main/software/src/vehicle_console/CONSOLE_VALIDATION.md
 [kai-hmi]: https://github.com/shinjuyeop/Control/blob/main/firmware/UNO_R4_DASHBOARD/README.md
