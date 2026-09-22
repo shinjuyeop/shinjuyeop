@@ -10,7 +10,7 @@ STM32·ROS 2 기반 차량 제어 소프트웨어와 HIL 시험 환경을 개발
 
 **Team K.A.I. · 2025 제어 파트장 / 2026–현재 하드웨어 팀장**
 
-2025년 ROS 2·Arduino Mega 기반 차량 제어 개발을 거쳐, 2026년에는 Host와 두 STM32G474RE에 기능을 분산하는 구조를 설계·개발했습니다. 펌웨어, 장치 간 인터페이스, HIL 시험 환경의 구현과 통합을 맡았습니다. **2026년 테스트위크에서 실차 통합과 상세 검증을 완료했습니다.**
+2025년 ROS 2·Arduino Mega 기반 차량 제어 개발을 거쳐, 2026년에는 Host와 두 STM32G474RE에 기능을 분산하는 구조를 설계·개발했습니다. 펌웨어, 장치 간 인터페이스, HIL 시험 환경의 구현과 통합을 맡았습니다. **2026년 테스트위크에서 실차 통합과 상세 검증을 완료했습니다.** 이후 실차 MCAP 기록을 바탕으로 조향 복구 정책을 수정하고, 종방향 제어와 시험·튜닝 도구를 확장하고 있습니다.
 
 ```mermaid
 flowchart TB
@@ -20,21 +20,23 @@ flowchart TB
     MOTOR["구동 모터"]
     STEER["조향 모터"]
     HMI["UNO R4 · HMI<br/>CAN 상태 수신 / LCD·터치"]
+    GAUGE["XIAO RP2350 · INA228<br/>LV 배터리 계측·Ah/Wh·SOC"]
     HOST <-->|micro-ROS| A
     HOST <-->|micro-ROS| B
     A <-->|UART| B
     A <-->|CAN| MOTOR
     HOST <-->|SocketCAN| STEER
     B -->|Dashboard CAN| HMI
+    GAUGE <-->|UART · 상태/정비| B
     classDef host fill:#12263a,color:#ffffff,stroke:#12263a
     classDef mcu fill:#e7f6f4,color:#123b3b,stroke:#26998b
     classDef peripheral fill:#f2f5f9,color:#25354a,stroke:#8b9caf
     class HOST host
-    class A,B mcu
+    class A,B,GAUGE mcu
     class MOTOR,STEER,HMI peripheral
 ```
 
-*핵심 제어·통신 경로를 요약한 구성도입니다. HIL에서는 STM_TEST가 차량 입력과 모터의 CAN 응답을 모사하며, 실제 STM_A/B 펌웨어를 사용합니다.*
+*현재 코드의 핵심 제어·통신 경로를 요약한 구성도입니다. HIL에서는 STM_TEST가 차량 입력과 모터의 CAN 응답을 모사하며, 실제 STM_A/B 펌웨어를 사용합니다.*
 
 ### 직접 설계·구현한 내용
 
@@ -42,10 +44,28 @@ flowchart TB
 |---|---|---|
 | RTOS 펌웨어·통신 | 태스크·우선순위 구성, UART DMA·ring buffer 수신, CRC8·sequence 검사, micro-ROS 재연결 상태 머신 | [STM_A][kai-stma] · [STM_B][kai-stmb] |
 | 명령·예외 처리 | 차량 명령 발행 경로 단일화, 시각·최신성·NaN/Inf 검사, 통신 경로별 timeout과 복구 동작 정의 | [명령 게이트][kai-governor] · [안전 동작][kai-safety] |
+| 조향 토크 제어 | 바퀴각 오차·각속도 기반 외부 PD, encoder 피드백, peak·지속 출력과 사용시간 제한, 목표각·바깥 방향 출력 제한 | [제어식·구현·시험 조건][kai-torque] |
+| 종방향 속도 제어 | STM_A의 20 Hz AUTO 속도 PI, 적분 포화 방지, 타력 주행·전류 재인가, Speed/Torque 공통 전류·RPM 한도 | [구현·기존 실차 기준선][kai-longitudinal] |
+| 시험 설정·기록 | 공중·주행 프리셋 TUI, 저장 후 재시작 적용, 실행 파라미터·변경 이벤트와 MCAP 기록, 조향·종방향 응답 분석 도구 통합 | [Control Tuning][kai-tuning] · [Control tools][kai-tools] |
 | 실행 상태 계측 | DWT 기반 태스크 실행시간, activation jitter, deadline miss, stack/heap 여유, E-stop callback→task 지연 관측 | [계측 정의][kai-runtime] · [C 구현][kai-runtime-code] |
 | HIL 자동화 | DAC/GPIO 입력·CAN 응답 모사, 브레이크 PWM 관측, 고장 주입 전 정상 통신 확인, YAML 시나리오와 JSON 결과 기록 | [STM_TEST][kai-stmtest] · [HIL 운용·검증][kai-hil] |
 | 운용·검증 화면 | 공용 React Console에 Vehicle 관측 전용 경로와 HIL 조작 경로 구성, 진단·통신 상태 표시 | [Console][kai-console] · [검증 기록][kai-console-validation] |
 | HMI 분리 | 안전 제어기에서 표시 기능 분리, CAN snapshot 수신, 물리·가상 터치의 화면 전환 로직 공유, C++ 렌더러 재사용 | [UNO R4 HMI][kai-hmi] |
+| LV 배터리 계측 | INA228·RP2350의 Ah/Wh 적산·SOC 저장, CRC32 UART·정비 ACK, STM_B를 통한 ROS·계기판 상태 전달 | [계측·통신 구성][kai-lv] · [펌웨어][kai-lv-firmware] |
+
+### 실차 기록을 바탕으로 수정한 사례
+
+**수동 조작 후 AUTO 조향이 다시 켜지지 않던 문제**
+
+9월 18일의 MCAP 17개와 시험 설정·로그를 대조했습니다. 조향 상태 19,229개에서 Disable 외 모터 fault bit는 관측되지 않았고, MANUAL 조작에 AUTO 각도 범위 검사를 적용하면서 Host의 `angle_limit` 잠금이 남는 경로를 확인했습니다. 시험 시작 전부터 잠겨 있던 기록과 기록 중 새로 잠긴 경우를 구분해 원인을 분석했습니다. [분석 기록][kai-steering-analysis]
+
+수동 조작과 AUTO 제어의 감시 범위를 분리하고, 목표각 제한과 바깥 방향 토크 차단을 유지하면서 안쪽 복귀를 허용하도록 수정했습니다. 실제 KEYA fault는 관측용·복구 가능·HARD로 분류하며, 복구 후에는 새 명령을 받아야 재진입합니다. HARD 잠금 해제는 MANUAL·정지·고장 해제 확인을 요구하고, 해제 요청 자체로 모터를 Enable하지 않습니다. [현재 복구 정책·검증 기록][kai-steering-recovery]
+
+**종방향 속도 응답 분석과 PI 제어 추가**
+
+기존 Speed 모드의 실차 기록에서 명령·GNSS 속도·RPM·전류·브레이크를 시간 정렬해 가속·감속·재인가 구간을 분석했습니다. RPM 환산 속도와 GNSS의 불일치를 따로 기록하고, 기존 응답을 비교 기준으로 삼아 STM_A에 전류 명령을 생성하는 속도 PI를 추가했습니다. [실측 기준선·PI 구현][kai-longitudinal]
+
+PI와 설정 경로는 호스트 회귀 테스트·펌웨어 빌드 및 HIL STM_A 플래시 후 상태 수신을 확인했습니다. **새 PI의 실차 추종 성능과 충격 감소는 아직 검증하지 않았으며**, 공중·주행 프리셋은 후속 시험용 후보값입니다. RP2350 계측 역시 코드 연결과 별도로 실장 상태의 교정·적산·정전 복구 검증이 남아 있습니다. [PI 검증 범위][kai-longitudinal] · [LV 계측 확인 항목][kai-lv]
 
 ### 확인할 수 있는 검증 기록
 
@@ -121,9 +141,9 @@ flowchart TB
 [GitHub · @shinjuyeop](https://github.com/shinjuyeop)
 
 <!--
-유지보수: 2026-09-14 작성.
+유지보수: 2026-09-14 작성, 2026-09-22 Team K.A.I. 내용 보강.
 기술 내용과 수치는 공개 저장소의 코드·설계 문서·저장된 검증 보고서를 대조했다.
-Control 756aa5442d0b327f3be6dd59b9b2cc3889b2341c
+Control 182e3fb0ae9902e1349c442045772a828e34d307
 Infineon_FastReflex 434a40762ffb06991537dff6f97ebe5bb2c5f0fe
 Infineon_FastReflex_E84 c1584227cf58234fa9b3f18d56a257db662ed018
 역할·인턴은 본인이 작성한 경력 기록 기준이다.
@@ -160,3 +180,12 @@ Infineon_FastReflex_E84 c1584227cf58234fa9b3f18d56a257db662ed018
 [fastreflex-experiments]: https://github.com/shinjuyeop/Infineon_FastReflex/blob/main/docs/experiment_protocol.md
 [ohnochoo]: https://github.com/shinjuyeop/ohnochoo
 [whomadethis]: https://github.com/shinjuyeop/whomadethis
+
+[kai-torque]: https://github.com/shinjuyeop/Control/blob/main/software/src/lateral_ctrl/TORQUE_CONTROL.md
+[kai-longitudinal]: https://github.com/shinjuyeop/Control/blob/main/docs/reports/2026-09-21_longitudinal_torque_pi.md
+[kai-tuning]: https://github.com/shinjuyeop/Control/blob/main/software/src/control_tuning/README.md
+[kai-tools]: https://github.com/shinjuyeop/Control/blob/main/software/src/control_tools/README.md
+[kai-steering-analysis]: https://github.com/shinjuyeop/Control/blob/main/docs/reports/2026-09-18_steering_fault.md
+[kai-steering-recovery]: https://github.com/shinjuyeop/Control/blob/main/docs/reports/2026-09-21_steering_availability.md
+[kai-lv]: https://github.com/shinjuyeop/Control/blob/main/docs/rp2350/lv_battery_gauge.md
+[kai-lv-firmware]: https://github.com/shinjuyeop/Control/blob/main/firmware/XIAO_RP2350_LV_GAUGE/README.md
