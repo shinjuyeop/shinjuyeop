@@ -6,9 +6,19 @@ STM32·ROS 2 기반 차량 제어 소프트웨어와 HIL 시험 환경을 개발
 
 [차량 제어][kai-project] · [모델 연구][fastreflex-research] · [엣지 AI 배포][fastreflex-deployment]
 
+## 진행 중인 프로젝트
+
+**[StrataDrive][stratadrive] · 차량 소프트웨어 아키텍처와 SIL 검증**
+
+Central–Zone–Leaf ECU 구조의 차량 소프트웨어를 개발하고, CARLA 폐루프에서 경로 추종과 정지 동작을 검증하고 있습니다.
+
+**[edge-asr][edge-asr] · 온디바이스 한국어 음성인식**
+
+Raspberry Pi 5에서 한국어 ASR 모델의 정확도·처리속도·자원 사용량을 비교하고, VAD와 발화 구간 처리 정책을 검증하고 있습니다.
+
 ## 01. 자율주행 차량의 분산 제어와 검증
 
-**Team K.A.I. · 2025 제어 파트장 / 2026–현재 하드웨어 팀장**
+**Team K.A.I. · 2025 제어 파트장 / 2026 하드웨어 팀장**
 
 2025년 ROS 2·Arduino Mega 기반 차량 제어 개발을 거쳐, 2026년에는 Host와 두 STM32G474RE에 기능을 분산하는 구조를 설계·개발했습니다. 펌웨어, 장치 간 인터페이스, HIL 시험 환경의 구현과 통합을 맡았습니다. **2026년 테스트위크에서 실차 통합과 상세 검증을 완료했습니다.** 이후 실차 MCAP 기록을 바탕으로 조향 복구 정책을 수정하고, 종방향 제어와 시험·튜닝 도구를 확장하고 있습니다.
 
@@ -97,8 +107,18 @@ flowchart TB
 | 기간 | 경험 |
 |---|---|
 | 2026.06–현재 | **(주)딥이티 기술개발 인턴** — 온디바이스 AI 모델 연구 및 임베디드 배포 검증, Infineon Startup Challenge 2026 프로젝트 참여 |
-| 2026–현재 | **Team K.A.I. 하드웨어 팀장** — 분산 제어 구조 설계, 펌웨어·Host 통합 및 실차 검증 |
+| 2026 | **Team K.A.I. 하드웨어 팀장** — 분산 제어 구조 설계, 펌웨어·Host 통합 및 실차 검증 |
 | 2025 | **Team K.A.I. 제어 파트장** — ROS 2·Arduino Mega·CAN 기반 1/2 규모 자율주행차 제어 개발 |
+
+## 수상내역
+
+| 연도 | 수상내역 | 수여기관 |
+|---|---|---|
+| 2026 | 대학생AI·S/W 모빌리티 경진대회 자작자율차 자율주행구현 부문 **대상 (1위)** | 국토교통부 |
+| 2026 | 대학생AI·S/W 모빌리티 경진대회 자작자율차 창작기술부문 **특별상 (1위)** | 한국자동차모빌리티안전학회 |
+| 2025 | 대학생 창작 모빌리티 경진대회 자작자율차 자율주행구현 부문 **특별상 (5위)** | 국토교통과학기술진흥원 |
+| 2025 | 대학생 창작 모빌리티 경진대회 자작자율차 창작기술부문 **우수상 (1위)** | 한국자동차모빌리티안전학회 |
+| 2025 | 제17회 창의설계경진대회 **장려상** | 건국대학교 공학교육혁신센터 |
 
 ## 사용 기술
 
@@ -132,6 +152,8 @@ Infineon_FastReflex_E84 c1584227cf58234fa9b3f18d56a257db662ed018
 사진·시연 추가 위치와 필요한 자료는 MEDIA_GUIDE.md 참고.
 -->
 
+[stratadrive]: https://github.com/shinjuyeop/StrataDrive
+[edge-asr]: https://github.com/shinjuyeop/edge-asr
 [kai-project]: https://github.com/shinjuyeop/Control
 [kai-architecture]: https://github.com/shinjuyeop/Control/blob/main/docs/ARCHITECTURE.md
 [kai-interfaces]: https://github.com/shinjuyeop/Control/blob/main/docs/INTERFACES.md
