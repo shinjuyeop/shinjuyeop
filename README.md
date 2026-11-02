@@ -124,7 +124,7 @@ flowchart TB
 
 | 분야 | 프로젝트에서 사용한 기술 |
 |---|---|
-| 펌웨어 | C · C++ · STM32G4 · FreeRTOS · CAN · UART · SPI · I2C |
+| 펌웨어 | C · C++ · STM32G4 · FreeRTOS · CAN · UART · SPI · I2C · PWM |
 | 시스템 통합·검증 | ROS 2 Humble · micro-ROS · SocketCAN · HIL · Python · Linux · Git |
 | 엣지 AI | PyTorch · MuJoCo · TensorFlow Lite · INT8 · Vela · PSoC Edge E84 · Ethos-U55 · ModusToolbox |
 | 도구·웹 UI | React · TypeScript · Vite · Supabase |
