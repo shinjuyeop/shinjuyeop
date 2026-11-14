@@ -1,6 +1,6 @@
 # 신주엽 | Juyeop Shin
 
-**Embedded Control · Vehicle Software**\
+**Embedded Systems · Vehicle Software**\
 건국대학교 전기전자공학부
 
 차량 제어 소프트웨어와 임베디드 시스템을 개발합니다.
