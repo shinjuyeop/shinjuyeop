@@ -20,7 +20,7 @@ Team K.A.I.의 ROS 2·STM32·FreeRTOS 기반 차량 제어 시스템입니다.
 ### StrataDrive · 차량 소프트웨어 아키텍처
 
 Central–Zone–Leaf ECU 구조에서 구성요소별 책임과 통신·실행 경계를 설계하는 C++ 기반 프로젝트입니다.
-SOME/IP 분산 통신과 CARLA 연동을 통해 차량 제어, 입력 유효성 검사와 고장 대응을 Host SIL에서 시험합니다.
+SOME/IP 기반 분산 통신과 CARLA 기반 차량 제어를 각각의 Host SIL 구성에서 검증하고, 입력 유효성 검사와 고장 대응을 시험합니다.
 현재 영상 인지와 주행·보호 기능의 연결을 확장하고 있습니다.
 
 [Repository][stratadrive] · [Architecture][stratadrive-architecture]
